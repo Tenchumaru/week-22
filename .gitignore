@@ -1,0 +1,11 @@
+# Environments
+.venv/
+__pycache__/
+venv/
+*.pyproj
+*.sw[op]
+*.user
+.env
+
+# Runtime files
+*.joblib
