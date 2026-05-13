@@ -25,3 +25,9 @@ Here is an example `payload.json` file.
   "features": [5.1, 3.5, 1.4, 0.2]
 }
 ```
+
+## Docker
+
+1. Run `docker build -t iris-api .` to build the Docker image.
+1. Run `docker run -p 8000:8000 iris-api` to run it.
+1. Test it by running step 2 above.
