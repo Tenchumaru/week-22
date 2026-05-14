@@ -28,6 +28,5 @@ Here is an example `payload.json` file.
 
 ## Docker
 
-1. Run `docker build -t iris-api .` to build the Docker image.
-1. Run `docker run -p 8000:8000 iris-api` to run it.
+1. docker compose up --build
 1. Test it by running step 2 above.

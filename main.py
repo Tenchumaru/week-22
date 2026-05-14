@@ -1,7 +1,8 @@
 import logging
 import time
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
+from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
 from schemas import PredictRequest, PredictResponse
 from model import load_model, train_and_save_model
 from sklearn import datasets
@@ -21,6 +22,11 @@ iris = datasets.load_iris()
 CLASS_NAMES = iris.target_names
 
 app = FastAPI(title="Iris Logistic Regression API")
+
+# --- Prometheus Metrics ---
+REQUEST_COUNT = Counter("request_count", "Total number of requests", ["method", "endpoint"])
+ERROR_COUNT = Counter("error_count", "Total number of errors", ["method", "endpoint"])
+LATENCY = Histogram("request_latency_seconds", "Request latency", ["method", "endpoint"])
 
 # --- Monitoring State ---
 REQUEST_COUNT = 0
@@ -53,6 +59,11 @@ async def monitoring_middleware(request: Request, call_next):
     )
 
     return response
+
+
+@app.get("/metrics")
+def metrics():
+    return PlainTextResponse(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 
 @app.post("/v1/predict", response_model=PredictResponse)
